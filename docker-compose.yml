@@ -21,11 +21,11 @@ services:
     container_name: fanap_postgres
     image: postgres
     env_file:
-      - .env
+      - db.env
     volumes:
       - db_data:/var/lib/postgresql/data/
     ports:
-      - "5433:5432"
+      - "5435:5432"
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
@@ -38,7 +38,7 @@ services:
   celery_worker:
     build: .
     image: celery
-    command: celery -A main.celery worker --loglevel=info
+    command: celery -A BlogApp.celery worker --loglevel=info
     volumes:
       - .:/app
     env_file:
@@ -51,7 +51,7 @@ services:
   celery_beat:
     build: .
     image: celery_beat
-    command: celery -A main.celery beat -l info
+    command: celery -A BlogApp.celery beat -l info
     volumes:
       - .:/app
     env_file:
